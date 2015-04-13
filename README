@@ -5,9 +5,9 @@ Author: James Grant <james@lightbox.org>
 
 INSTALLATION/USAGE
 
-To use, simply unzip into your website somewhere, and point your browser at 
+To use, simply unzip into your website somewhere, and point your browser at
 	pg2mysql.php
-If you want to use your own interface, simply include the pg2mysql.inc.php 
+If you want to use your own interface, simply include the pg2mysql.inc.php
 into your own code and call the 'pg2mysql' function.  It accepts one input
 (the postgres code to be converted) and returns the mysql code.
 
@@ -27,7 +27,7 @@ DONATIONS APPRECIATED
 
 	Paypal: paypal@lightbox.org
 	Bitcoin: 1Gt6D2HcwnoLCeDMkP6xKMC4P65g42TiVn
-	Cheque/money order: 
+	Cheque/money order:
 		Lightbox Technologies Inc
 		240 Catherine St. Suite 312
 		Ottawa, ON
@@ -47,7 +47,7 @@ VERSION 1.2 (Thanks to John Puster)
 - add conversions for 'time with(out) time zone' to 'time' field
 - correct 'timestamp with(out) time zone' to convert to 'timestamp' instead of 'datetime' and allow default CURRENT_TIMESTAMP
 
-VERSION 1.3 
+VERSION 1.3
 - add command line version that can process large files
 - add conversions for many new data types
 - add checks for multi-line INSERTs that contain quoted strings across multiple rows that contain "end of sql" look-alike line endings
@@ -79,3 +79,11 @@ VERSION 1.9
 - Introduce commented header at the top of converted file
 - Fix SQL_MODE and time_zone so it doesn't repeat when using CLI version
 - Move config['engine'] to common file instead of only CLI version
+
+VERSION 1.9.1 (LATEST)
+- Current fork
+- Includes fixes for PHP 5.3 and MySQL 5
+- Fixed issue with certain keywords causing malformed statements
+
+Known Issue(s):
+- This will not catch reserved keywords in MySQL but not PG (e.g. you can have a table named "load" in PG, but not MySQL.)

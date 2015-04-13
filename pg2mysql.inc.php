@@ -259,16 +259,18 @@ function pg2mysql($input, $header=true)
 		if(substr($line,0,11)=="INSERT INTO") {
 			if(substr($line,-3,-1)==");") {
 				//we have a complete insert on one line
-				list($before,$after)=explode("VALUES",$line);
+				list($before,$after)=explode(") VALUES (",$line);
 				//we only replace the " with ` in what comes BEFORE the VALUES
 				//(ie, field names, like INSERT INTO table ("bla","bla2") VALUES ('s:4:"test"','bladata2');
 				//should convert to      INSERT INTO table (`bla`,`bla2`) VALUES ('s:4:"test"','bladata2');
 
+                                $before=$before . ") ";
 				$before=str_replace("\"","`",$before);
 
 				//in after, we need to watch out for escape format strings, ie (E'escaped \r in a string'), and ('bla',E'escaped \r in a string'),  but could also be (number, E'string'); so we cant search for the previoous '
 				//ugh i guess its possible these strings could exist IN the data as well, but the only way to solve that is to process these lines one character
-				//at a time, and thats just stupid, so lets just hope this doesnt appear anywhere in the actual data
+                                //at a time, and thats just stupid, so lets just hope this doesnt appear anywhere in the actual data
+                                $after=" (".$after;
 				$after=str_replace(" (E'"," ('",$after);
 				$after=str_replace(", E'",", '",$after);
 
@@ -280,16 +282,18 @@ function pg2mysql($input, $header=true)
 				//this insert spans multiple lines, so keep dumping the lines until we reach a line
 				//that ends with  ");"
 
-				list($before,$after)=explode("VALUES",$line);
+				list($before,$after)=explode(") VALUES (",$line);
 				//we only replace the " with ` in what comes BEFORE the VALUES
 				//(ie, field names, like INSERT INTO table ("bla","bla2") VALUES ('s:4:"test"','bladata2');
 				//should convert to      INSERT INTO table (`bla`,`bla2`) VALUES ('s:4:"test"','bladata2');
 
+                                $before=$before . ") ";
 				$before=str_replace("\"","`",$before);
 
 				//in after, we need to watch out for escape format strings, ie (E'escaped \r in a string'), and ('bla',E'escaped \r in a string')
 				//ugh i guess its possible these strings could exist IN the data as well, but the only way to solve that is to process these lines one character
 				//at a time, and thats just stupid, so lets just hope this doesnt appear anywhere in the actual data
+                                $after=" (".$after;
 				$after=str_replace(" (E'"," ('",$after);
 				$after=str_replace(", E'",", '",$after);
 
